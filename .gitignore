@@ -29,3 +29,5 @@ docs/runlog/
 _cache/scratch/
 reports/*.html
 reports/assets/
+eval/data/
+eval/runs/

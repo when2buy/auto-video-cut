@@ -49,3 +49,27 @@
 **Why**: prevents the agent from optimizing for "tests green" instead of "feature works". Steve called this out explicitly.
 
 **Reversibility**: easy to soften later if this turns out too strict.
+
+---
+
+## 2026-05-26: v0.1 confirmed insufficient on actual target genre (Bilibili 营销号)
+
+**Context**: TED proxy showed 11% trim. Bilibili 营销号 (BV1XJDKBhEyE) shows 0%.
+
+**Decision**: v0.1 ships only as the "stage 1 of v0.2 hybrid". Standalone use is not advertised.
+
+**Why**: 营销号 content is wall-to-wall narration + BGM. Silence-cut depends on a signal (silence) that this genre doesn't have. No threshold tweak fixes physics.
+
+**Reversibility**: not applicable — measured fact.
+
+---
+
+## 2026-05-26: bilibili-api-python is the correct fetcher for this pod
+
+**Context**: yt-dlp fails 412 on Bilibili. Vault notes (`02-areas/ai-engineering/content-extraction.md`) covered f2 for 抖音 but not Bilibili.
+
+**Decision**: use `pip install bilibili-api-python` + iPhone UA + Referer per video. Saved as `eval/fetch_bilibili.sh`.
+
+**Why**: handles wbi signing transparently, public videos require no cookie, robust to CDN flakiness when paired with `requests.adapters.HTTPAdapter(max_retries=Retry(total=5))`.
+
+**Reversibility**: easy. If yt-dlp's Bilibili extractor improves later, switch.

@@ -14,3 +14,6 @@ Format: `- YYYY-MM-DD <feature>: <one-line learning>`
 - 2026-05-26 v0.1-real-eval: synthetic fixture was misleading. Real already-edited content (TED talk Chinese-subbed) only trims 11%. v0.1 alone is INSUFFICIENT for marketing/creator use case. Need v0.2 ASR.
 - 2026-05-26 data: Bilibili anti-bot (HTTP 412), YouTube channel API 404 from this pod. yt-dlp works on TED.com. For real 营销号 fixture, need Steve to provide mp4 directly OR fetch from non-blocked machine.
 - 2026-05-26 perf: full 14min run = 49s wall-clock (~3.5s compute / 1min input). Most of it is ffmpeg re-encoding segments, not silence detection itself.
+- 2026-05-26 bili-fetch: yt-dlp fails on Bilibili w/ HTTP 412 even with iPhone UA + Referer. Workaround: `bilibili-api-python` (PyPI) handles wbi signing properly. Direct HTTP to /x/web-interface/view also works for metadata. Saved as eval/fetch_bilibili.sh.
+- 2026-05-26 bili-real-eval: real Bilibili 营销号 (BV1XJDKBhEyE) has mean_volume -11.7 dB and almost zero silence — v0.1 trims 0% even at -20 dB / 0.15s. This is the worst case and the target case simultaneously.
+- 2026-05-26 mux: bilibili-api-python's get_download_url can return baseUrl that occasionally serves truncated streams when downloaded via raw requests w/o retry adapter. Use Session + Retry(total=5, backoff_factor=1.0) on requests, then ffmpeg copy mux.

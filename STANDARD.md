@@ -1,6 +1,6 @@
 # The Standard
 
-> One page. Three rules. Everything else is a reference doc.
+> One page. **Four rules.** Everything else is a reference doc.
 
 ---
 
@@ -39,6 +39,30 @@ Stop and `/confirm` with a human **only** for actions that can't be undone in 5 
 
 Everything else: **don't ask, just do**. The point of this standard is that the human is *not* a bottleneck.
 
+## 4. REPORT — every checkpoint is a URL
+
+When the human needs to see something — research findings, a candidate decision, a spec, a feature demo, an eval result — produce a **shareable HTML URL**, not a Markdown commit.
+
+Use [`report-skill`](https://github.com/oyzh888/report-skill):
+
+```bash
+report new compare-grid --out reports/<date>-<slug>.html  # or case-study / metrics-board
+# fill the JSON data block
+report publish reports/<date>-<slug>.html                 # → prints one URL
+```
+
+Reply to the human with **the URL first**, file path second.
+
+Why: humans absorb a 1-screen visual in seconds; reading a 500-line Markdown takes minutes. The faster the human can confirm, the faster the loop spins. Reports are the *only* place a human actually reads agent output.
+
+**Triggers** (each → one report):
+- Research phase done → `compare-grid` of candidate approaches
+- Spec drafted → `case-study` of the design doc (4 sections + decision tree)
+- Feature shipped → `metrics-board` of acceptance results
+- Eval run finished → `metrics-board` or `compare-grid` per task
+
+If you can't tell the human "look at this URL", you haven't checkpointed.
+
 ---
 
 ## Defaults (rarely overridden)
@@ -58,6 +82,7 @@ Long standards don't get followed by humans *or* agents.
 > *"现在的模型就是 follow instruction 很好的"* — model is good
 > *"你不用你每次你人一直在那个 loop"* — human shouldn't be in loop
 > *"我连那个文档也不看，我只看真的 design 档"* — only design doc matters
+> *"通常都需要先出一个 report，由我 confirm 后再继续"* — every checkpoint is a URL
 
 A 12-SOP earlier draft contradicted all three. This version doesn't.
 
@@ -68,6 +93,7 @@ If a rule isn't on this page, it's not a rule.
 ## Reference (read on demand, not by default)
 
 - [agents.md](https://agents.md) — open spec for `AGENTS.md`, 30+ agents compatible
+- [report-skill](https://github.com/oyzh888/report-skill) — the URL-producing companion to this standard
 - [GitHub Spec Kit](https://github.com/github/spec-kit) — heavier SDD framework if you want named slash commands
 - [Cognition: "Don't Build Multi-Agents"](https://cognition.ai/blog/dont-build-multi-agents) — why parallel sub-agents fail
 - [Anthropic best-practices](https://code.claude.com/docs/en/best-practices) — plan mode, fresh-context critic

@@ -27,3 +27,5 @@ dist/
 # Agent runlogs (ephemeral, agent-managed)
 docs/runlog/
 _cache/scratch/
+reports/*.html
+reports/assets/

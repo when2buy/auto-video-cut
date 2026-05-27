@@ -1,12 +1,24 @@
 [project]
 name = "auto-video-cut"
-version = "0.0.1"
-description = "<one-line description>"
+version = "0.1.0"
+description = "Trim long videos to tight cuts. Silence → ASR → LLM hybrid pipeline."
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "auto-editor>=24.0",
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=7", "ruff>=0.1"]
+
+[project.scripts]
+avc = "avc.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.ruff]
 line-length = 100
@@ -14,8 +26,9 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W"]
-ignore = ["E501"]  # line length handled by formatter
+ignore = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+pythonpath = ["src"]

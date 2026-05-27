@@ -1,24 +1,27 @@
 # Decisions
 
-> Curated, durable record of decisions that future agents (and humans) need to know.
-> Human-edited. Agents may suggest entries via PR but should not append directly.
-
-Format: one entry per decision. Include rationale, alternatives considered, date.
+> Curated, durable record. Agents propose via PR; humans curate.
 
 ---
 
-## YYYY-MM-DD: <decision title>
+## 2026-05-26: v0.1 implementation = pure ffmpeg, not auto-editor wrapper
 
-**Context**: <why this came up>
+**Context**: spec called out 3 candidates (A: auto-editor wrapper, B: pure ffmpeg silenceremove filter, C: librosa+ffmpeg from scratch). Chose A. auto-editor turned out to need GLIBC_2.38, which isn't on the Pluto pod.
 
-**Decision**: <what we picked>
+**Decision**: implemented C-lite: pure ffmpeg `silencedetect` filter (not the fragile `silenceremove`) + per-segment cut + concat demuxer. ~200 lines.
 
-**Alternatives considered**: <list>
+**Why**: zero external binary deps, works on any pod with ffmpeg, frame-accurate, easy to extend (silencedetect output is exactly what v0.2 ASR will need to merge with).
 
-**Why**: <synthesis — taste / trade-off / constraint>
-
-**Reversibility**: easy / medium / hard
+**Reversibility**: easy. If auto-editor becomes available later we can A/B test.
 
 ---
 
-(no decisions yet)
+## 2026-05-26: v0.1 staging = ship silence-only first, add ASR in v0.2
+
+**Context**: research recommended approach D (Hybrid silence + ASR + LLM). Doing all of D at once = 3-4 days of code before any user feedback.
+
+**Decision**: ship v0.1 as silence-only (1 day). v0.2 adds Whisper. v0.3 adds Gemini ranking.
+
+**Why**: each version is independently demoable + has its own report URL. Steve sees real progress per cycle, not a 4-day vacuum.
+
+**Reversibility**: trivial — additive.

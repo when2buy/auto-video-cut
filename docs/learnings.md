@@ -1,14 +1,13 @@
 # Learnings
 
-> Agents append to this file as they work. Humans periodically distill notable items
-> into `docs/decisions.md` or domain how-tos. Treat this file as a streaming log.
+> Agents append to this file. Humans periodically distill into `docs/decisions.md` or how-tos.
 
-Format: one bullet per learning, with date and feature context. Keep each terse.
-
-```
-- 2026-MM-DD <feature>: <one-line learning, e.g. "pytest -k <name> faster than -x for iter loop">
-```
+Format: `- YYYY-MM-DD <feature>: <one-line learning>`
 
 ---
 
-(empty — add as you go)
+- 2026-05-26 v0.1: auto-editor's prebuilt linux binary requires GLIBC_2.38 — not on Pluto pod. Pure ffmpeg silencedetect + concat works in <200 lines. Decision reversibility paid off.
+- 2026-05-26 v0.1: ffmpeg's `-f null -` muxer needs `-vn` to drop video stream — some builds lack `wrapped_avframe` encoder. Otherwise silencedetect never runs.
+- 2026-05-26 v0.1: AAC audio adds tiny noise floor; -30 dBFS threshold still catches `anullsrc` digital silence reliably with d=0.4.
+- 2026-05-26 v0.1: ffmpeg "-c copy" with concat demuxer works only if all segments have identical codec params; we re-encode each segment with consistent settings to be safe (~10% size overhead, frame-accurate).
+- 2026-05-26 process: report-skill compare-grid template handles `kind: "video"` cells with data: URIs — self-contained reports embed input vs output mp4s directly.

@@ -51,13 +51,29 @@ _FONT_CANDIDATES = {
 }
 
 PRESETS: dict[str, dict] = {
-    # name              :  font_key,    size, fill (RGB),         stroke (RGB),     stroke_w, y_frac, chunk_size
-    "opus":     dict(font_key="latin-bold", size=64,  fill=(255, 255, 0),    stroke=(0, 0, 0),     stroke_w=4, y_frac=0.78, chunk=3),
-    # Chinese: smaller font (CJK glyphs are wider) + shorter chunk so we don't overflow 1080px width
-    "opus-cn":  dict(font_key="cjk",        size=52,  fill=(255, 255, 0),    stroke=(0, 0, 0),     stroke_w=3, y_frac=0.80, chunk=2),
-    "minimal":  dict(font_key="latin-bold", size=44,  fill=(255, 255, 255),  stroke=(0, 0, 0),     stroke_w=3, y_frac=0.85, chunk=4),
-    "karaoke":  dict(font_key="latin-bold", size=68,  fill=(0, 255, 0),      stroke=(0, 0, 0),     stroke_w=5, y_frac=0.78, chunk=3),
+    # name              :  font_key,  size, fill (RGB),         stroke (RGB),     stroke_w, y_frac, chunk
+    # font_key="auto" means: per-chunk, pick Latin font if all-ASCII, CJK font if any CJK chars.
+    # Use this for any preset that may see mixed-language transcripts.
+    "opus":     dict(font_key="auto", size=64, fill=(255, 255, 0),    stroke=(0, 0, 0),     stroke_w=4, y_frac=0.78, chunk=3),
+    "opus-cn":  dict(font_key="auto", size=52, fill=(255, 255, 0),    stroke=(0, 0, 0),     stroke_w=3, y_frac=0.80, chunk=2),
+    "minimal":  dict(font_key="auto", size=44, fill=(255, 255, 255),  stroke=(0, 0, 0),     stroke_w=3, y_frac=0.85, chunk=4),
+    "karaoke":  dict(font_key="auto", size=68, fill=(0, 255, 0),      stroke=(0, 0, 0),     stroke_w=5, y_frac=0.78, chunk=3),
 }
+
+
+def _has_cjk(text: str) -> bool:
+    """Return True if any character is in a CJK Unicode block (U+4E00..U+9FFF + extras)."""
+    for ch in text:
+        cp = ord(ch)
+        if (
+            0x3000 <= cp <= 0x9FFF or       # CJK Symbols, Hiragana, Katakana, CJK Unified
+            0xAC00 <= cp <= 0xD7AF or       # Hangul Syllables
+            0xF900 <= cp <= 0xFAFF or       # CJK Compatibility Ideographs
+            0xFF00 <= cp <= 0xFFEF or       # Halfwidth/Fullwidth
+            0x20000 <= cp <= 0x2FFFF        # CJK Extension B+
+        ):
+            return True
+    return False
 
 
 def _find_font(font_key: str, size: int):
@@ -101,9 +117,15 @@ def build_caption_assets(
     from PIL import Image, ImageDraw
 
     P = PRESETS.get(style, PRESETS["opus"])
-    font = _find_font(P["font_key"], P["size"])
     if chunk_size is None:
         chunk_size = P.get("chunk", 3)
+    # Pre-load both fonts; we'll pick per chunk if font_key=="auto"
+    latin_font = _find_font("latin-bold", P["size"])
+    cjk_font = _find_font("cjk", P["size"])
+    if P["font_key"] == "auto":
+        font = None  # picked per chunk below
+    else:
+        font = _find_font(P["font_key"], P["size"])
 
     if not any(s.words for s in transcript.sentences):
         raise ValueError(
@@ -135,37 +157,40 @@ def build_caption_assets(
     for ci, chunk in enumerate(chunks):
         chunk_text = " ".join(w["text"] for w in chunk)
 
+        # Pick font per chunk if "auto" — CJK font if chunk has any CJK character,
+        # else Latin. Mixed chunks (rare) use CJK font (which on Droid Fallback
+        # has no Latin glyphs, but mixed cases are rare enough we accept the trade
+        # for now; future improvement: use a font with both like Noto Sans CJK).
+        chunk_font = font
+        if chunk_font is None:
+            chunk_font = cjk_font if _has_cjk(chunk_text) else latin_font
+
         # Determine total chunk text width (PIL has the actual font metrics)
-        # Use a temp drawing context to measure
         tmp_img = Image.new("RGBA", (1, 1), (0, 0, 0, 0))
         tmp_d = ImageDraw.Draw(tmp_img)
-        bbox = tmp_d.textbbox((0, 0), chunk_text, font=font, stroke_width=P["stroke_w"])
+        bbox = tmp_d.textbbox((0, 0), chunk_text, font=chunk_font, stroke_width=P["stroke_w"])
         text_w = bbox[2] - bbox[0]
         text_h = bbox[3] - bbox[1]
-        # PNG must be slightly bigger to fit stroke+padding
         pad = 24
         png_w = min(play_w - 80, text_w + pad * 2)
         png_h = text_h + pad * 2
-
-        # Center text horizontally on a transparent canvas
         tx = (png_w - text_w) // 2 - bbox[0]
         ty = (png_h - text_h) // 2 - bbox[1]
 
         for wi, active_word in enumerate(chunk):
             img = Image.new("RGBA", (png_w, png_h), (0, 0, 0, 0))
             d = ImageDraw.Draw(img)
-            # Render each word individually so we can color the active one differently
             x_cursor = tx
             for word in chunk:
                 w_text = word["text"]
-                w_bbox = d.textbbox((x_cursor, ty), w_text, font=font, stroke_width=P["stroke_w"])
+                w_bbox = d.textbbox((x_cursor, ty), w_text, font=chunk_font, stroke_width=P["stroke_w"])
                 w_color = fill if word is active_word else white
                 d.text(
-                    (x_cursor, ty), w_text, font=font,
+                    (x_cursor, ty), w_text, font=chunk_font,
                     fill=w_color,
                     stroke_width=P["stroke_w"], stroke_fill=stroke_fill,
                 )
-                x_cursor = w_bbox[2] + (font.size // 4)  # space after word
+                x_cursor = w_bbox[2] + (chunk_font.size // 4)
 
             png_path = work_dir / f"cap_{ci:04d}_{wi:02d}.png"
             img.save(png_path, "PNG", optimize=True)

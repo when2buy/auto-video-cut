@@ -55,6 +55,29 @@ def main(argv: list[str] | None = None) -> int:
     pipe.add_argument("--target-h", type=int, default=1920)
     pipe.add_argument("-v", "--verbose", action="store_true")
 
+    # ---------- remix ----------
+    remix = sub.add_parser(
+        "remix",
+        help="template-driven semantic remix (non-chronological reordering by narrative role)",
+    )
+    remix.add_argument("input", type=Path)
+    remix.add_argument("--out", type=Path, required=True)
+    remix.add_argument(
+        "--template", required=True,
+        choices=["viral_hook", "top3", "thesis", "trailer"],
+        help="which remix template to apply",
+    )
+    remix.add_argument("--model", type=str, default="gemini-2.5-pro")
+    remix.add_argument("--reframe", action="store_true")
+    remix.add_argument("--captions", action="store_true")
+    remix.add_argument("--caption-style", type=str, default="opus",
+                       choices=["opus", "opus-cn", "minimal", "karaoke"])
+    remix.add_argument("--cached-transcript", type=Path,
+                       help="reuse a previously-saved transcript.json instead of re-ASR")
+    remix.add_argument("--target-w", type=int, default=1080)
+    remix.add_argument("--target-h", type=int, default=1920)
+    remix.add_argument("-v", "--verbose", action="store_true")
+
     args = parser.parse_args(argv)
 
     if args.cmd == "cut":
@@ -91,6 +114,36 @@ def main(argv: list[str] | None = None) -> int:
         if args.mode == "asr":
             print(f"  {stats['n_kept']}/{stats['n_sentences']} sentences kept; "
                   f"transcript saved to {stats['transcript_path']}")
+        return 0
+
+    if args.cmd == "remix":
+        if not args.input.exists():
+            print(f"error: input not found: {args.input}", file=sys.stderr)
+            return 2
+        from .remix_cut import remix_cut
+        try:
+            res = remix_cut(
+                input_video=args.input,
+                output_video=args.out,
+                template=args.template,
+                model=args.model,
+                reframe=args.reframe,
+                captions=args.captions,
+                caption_style=args.caption_style,
+                cached_transcript=args.cached_transcript,
+                target_w=args.target_w,
+                target_h=args.target_h,
+                verbose=args.verbose,
+            )
+        except Exception as e:
+            print(f"error: {e}", file=sys.stderr)
+            return 1
+        print(
+            f"✓ {args.input.name} → {args.out.name} ({res['template']}): "
+            f"{res['in_dur']:.1f}s → {res['out_dur']:.1f}s "
+            f"({res['n_kept']}/{res['n_sentences']} sentences, {res['n_segments']} segments)"
+        )
+        print(f"  rationale: {res['rationale']}")
         return 0
 
     if args.cmd == "pipeline":

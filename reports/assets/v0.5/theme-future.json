@@ -1,0 +1,19 @@
+{
+  "label": "Theme: 'future intuitions fail us'",
+  "user_theme": "the ways our intuitions about the future fail us",
+  "theme": "Our innate intuitions about the future are often flawed, leading us from personal procrastination to a collective inability to perceive long-term risks.",
+  "rationale": "This supercut uses Tim Urban to provide the relatable, emotional anchor, showing how our personal plans for the future crumble, leading to long-term regret. Sam Harris elevates this personal failing to a societal level, explicitly naming it a 'failure of intuition' and warning that our cognitive biases make us unreliable at assessing large-scale, future dangers. Lera Boroditsky offers a foundational explanation, revealing that our very perception of time is a linguistic construct, exposing how deep our cognitive blinders can go.",
+  "out_dur": 75.283542,
+  "n_clips": 8,
+  "n_picks": 21,
+  "per_source_seconds": {
+    "tim-urban-procrast": 41.639999999999674,
+    "sam-harris-ai": 14.599999999999845,
+    "ted-cn": 20.7199999999998
+  },
+  "source_labels": {
+    "tim-urban-procrast": "Tim Urban — Procrastinator",
+    "sam-harris-ai": "Sam Harris — AI Risk",
+    "ted-cn": "Lera Boroditsky — Language"
+  }
+}

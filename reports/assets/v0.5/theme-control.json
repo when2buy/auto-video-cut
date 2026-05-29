@@ -1,0 +1,19 @@
+{
+  "label": "Theme: 'what controls us'",
+  "user_theme": "what controls us — and how we don't see it",
+  "theme": "We are governed by unseen forces, from internal drives to the language we speak, and our failure to perceive these controls can leave us as mere spectators in our own lives.",
+  "rationale": "This supercut constructs an argument about the invisible forces that control human behavior. It begins with Sam Harris introducing the idea of a 'failure of intuition' about danger. Tim Urban's 'Instant Gratification Monkey' provides a concrete, internal example of being controlled by our own primitive drives. Lera Boroditsky then expands the theme to the cognitive level, showing how language itself invisibly shapes our perception of reality. The argument escalates with Harris's warning about AI, an external control system we are building while remaining blind to its existential risks. The piece concludes with Urban's poignant observation that the ultimate consequence of this unseen control is becoming a 'spectator' in one's own life.",
+  "out_dur": 75.548753,
+  "n_clips": 10,
+  "n_picks": 23,
+  "per_source_seconds": {
+    "sam-harris-ai": 28.56000000000011,
+    "tim-urban-procrast": 33.61999999999958,
+    "ted-cn": 13.579999999999856
+  },
+  "source_labels": {
+    "tim-urban-procrast": "Tim Urban — Procrastinator",
+    "sam-harris-ai": "Sam Harris — AI Risk",
+    "ted-cn": "Lera Boroditsky — Language"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "label": "Auto-discovered theme",
+  "user_theme": null,
+  "theme": "Our minds are running on outdated software for the modern world.",
+  "rationale": "This supercut argues that our cognitive 'operating system' is mismatched for the world we've built. Tim Urban introduces the internal conflict between our primal, short-term 'monkey' brain and our rational, long-term planner. Sam Harris escalates this concept to a species-wide level, showing how this same intuitive failure prevents us from grasping the existential risks of our own technology, like AI. Lera Boroditsky concludes by revealing that our perception of reality is itself a construct of our language, challenging us to become aware of our cognitive biases and consciously choose how we think.",
+  "out_dur": 85.043292,
+  "n_clips": 9,
+  "n_picks": 27,
+  "per_source_seconds": {
+    "tim-urban-procrast": 36.539999999999736,
+    "sam-harris-ai": 34.159999999999954,
+    "ted-cn": 15.90999999999974
+  },
+  "source_labels": {
+    "tim-urban-procrast": "Tim Urban — Procrastinator",
+    "sam-harris-ai": "Sam Harris — AI Risk",
+    "ted-cn": "Lera Boroditsky — Language"
+  }
+}

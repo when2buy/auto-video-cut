@@ -78,6 +78,30 @@ def main(argv: list[str] | None = None) -> int:
     remix.add_argument("--target-h", type=int, default=1920)
     remix.add_argument("-v", "--verbose", action="store_true")
 
+    # ---------- multi-remix ----------
+    mr = sub.add_parser(
+        "multi-remix",
+        help="cross-source supercut: weave N input videos into ONE coherent edit (theme can be auto-discovered)",
+    )
+    mr.add_argument("--inputs", type=Path, nargs="+", required=True,
+                    help="2+ source video paths")
+    mr.add_argument("--out", type=Path, required=True)
+    mr.add_argument("--label", type=str, nargs="+", default=None,
+                    help="optional human-friendly labels matching --inputs (e.g. 'Tim Urban')")
+    mr.add_argument("--cached-transcripts", type=Path, nargs="+", default=None,
+                    help="optional transcript.json paths matching --inputs (skip re-ASR)")
+    mr.add_argument("--theme", type=str, default=None,
+                    help="user-given theme. omit to let Gemini discover one")
+    mr.add_argument("--target-s", type=float, default=80.0,
+                    help="target output duration in seconds")
+    mr.add_argument("--model", type=str, default="gemini-2.5-pro")
+    mr.add_argument("--captions", action="store_true")
+    mr.add_argument("--caption-style", type=str, default="opus",
+                    choices=["opus", "opus-cn", "minimal", "karaoke"])
+    mr.add_argument("--target-w", type=int, default=1080)
+    mr.add_argument("--target-h", type=int, default=1920)
+    mr.add_argument("-v", "--verbose", action="store_true")
+
     args = parser.parse_args(argv)
 
     if args.cmd == "cut":
@@ -114,6 +138,46 @@ def main(argv: list[str] | None = None) -> int:
         if args.mode == "asr":
             print(f"  {stats['n_kept']}/{stats['n_sentences']} sentences kept; "
                   f"transcript saved to {stats['transcript_path']}")
+        return 0
+
+    if args.cmd == "multi-remix":
+        # Validate inputs
+        for p in args.inputs:
+            if not p.exists():
+                print(f"error: input not found: {p}", file=sys.stderr)
+                return 2
+        if args.label and len(args.label) != len(args.inputs):
+            print("error: --label count must match --inputs count", file=sys.stderr)
+            return 2
+        if args.cached_transcripts and len(args.cached_transcripts) != len(args.inputs):
+            print("error: --cached-transcripts count must match --inputs count", file=sys.stderr)
+            return 2
+        labels = args.label or [None] * len(args.inputs)
+        cached = args.cached_transcripts or [None] * len(args.inputs)
+        triples = [(p, lbl, c) for p, lbl, c in zip(args.inputs, labels, cached)]
+        from .multi_remix import multi_remix as _mr
+        try:
+            res = _mr(
+                inputs=triples,
+                output_video=args.out,
+                theme=args.theme,
+                target_duration_s=args.target_s,
+                model=args.model,
+                reframe_target_w=args.target_w,
+                reframe_target_h=args.target_h,
+                captions=args.captions,
+                caption_style=args.caption_style,
+                verbose=args.verbose,
+            )
+        except Exception as e:
+            print(f"error: {e}", file=sys.stderr)
+            return 1
+        print(f"✓ {len(args.inputs)} sources → {args.out.name}: "
+              f"{res['out_dur']:.1f}s ({res['n_clips']} clips)")
+        print(f"  theme: {res['theme']}")
+        print(f"  per source:")
+        for vid, dur in res["per_source_seconds"].items():
+            print(f"    {vid}: {dur:.1f}s")
         return 0
 
     if args.cmd == "remix":

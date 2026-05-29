@@ -27,8 +27,23 @@ dist/
 # Agent runlogs (ephemeral, agent-managed)
 docs/runlog/
 _cache/scratch/
-reports/*.html
-reports/assets/
+
+# Heavy data — never in git
 eval/data/
 eval/runs/
+eval/remix/*.mp4
+eval/remix/*.artifacts/
 .wrangler/
+
+# Legacy heavy reports (pre-v0.3, base64-embedded videos, >5 MB).
+# Co-deployed via wrangler but not committed.
+reports/2026-05-26-bili-real.html
+reports/2026-05-26-real-eval.html
+reports/2026-05-26-mvp-shipped.html
+reports/2026-05-29-v0.2-asr-shipped.html
+
+# Legacy preview assets from v0.1/v0.2 reports (one-off, not referenced any more)
+reports/assets/bili-*.mp4
+reports/assets/input.mp4
+reports/assets/output.mp4
+reports/assets/ted-*.mp4

@@ -1,0 +1,50 @@
+/home/colligo/.local/lib/python3.10/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+[0;93m2026-05-29 08:50:10.327993001 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+[remix_cut] 1/5 transcript loaded from /home/colligo/zouyang/personal/auto-video-cut/eval/runs/tim-urban-procrast-D-final.artifacts/transcript.json
+[remix_cut] 2/5 template 'top3' via gemini-2.5-pro
+[remix] template=top3 kept 14 sentences = 61s of 675s
+[remix] indices in output order: [31, 32, 33, 34, 67, 68, 69, 70, 71, 118, 119, 120, 121, 122]
+[remix] rationale: The edit opens with the epic senior thesis story, as its high-stakes drama and humor provide the strongest possible hook. The second clip explains the 'why' behind this behavior by introducing the Instant Gratification Monkey, giving a hilarious and relatable example of its logic. The reel concludes by revealing the 'Panic Monster,' which provides a conceptual payoff and satisfying resolution to the problem established in the first two clips.
+[remix_cut] 3/5 cut (5 segments, output order)
+  [seg 0] 94.32-122.96s
+  [seg 1] 248.97-258.95s
+  [seg 2] 260.61-266.43s
+  [seg 3] 421.19-427.97s
+  [seg 4] 428.15-440.09s
+[seg 0] 94.32-122.96s
+[seg 1] 248.97-258.95s
+[seg 2] 260.61-266.43s
+[seg 3] 421.19-427.97s
+[seg 4] 428.15-440.09s
+[remix_cut] 4/5 reframe to 1080x1920
+[reframe] no face track on cut.mp4; center crop
+[remix_cut] 5/5 captions (re-transcribe + render + overlay)
+  [   0.4-   2.8] And then two months turned into one month,
+  [   2.9-   4.3] which turned into two weeks.
+  [   4.6-   8.8] And one day I woke up with three days until the deadline,
+  [  10.3-  12.1] still not having written a word.
+  [  12.3-  13.9] And so I did the only thing I could.
+  [  14.3-  17.2] I wrote 90 pages over 72 hours,
+  [  17.2-  19.1] pulling not one, but two all-nighters.
+  [  19.4-  21.6] Humans are not supposed to pull two all-nighters.
+  [  23.7-  26.5] Sprinted across campus, dove in slow motion,
+  [  26.7-  28.5] and got it in just at the deadline.
+  [  28.6-  30.1] But the monkey doesn't like that plan.
+  [  30.4-  32.5] So he actually takes the wheel, and he says,
+  [  32.6-  35.0] actually, let's read the entire Wikipedia page
+  [  35.0-  36.9] of the Nancy Kerrigan-Tanya Harding scandal,
+  [  37.0-  38.5] because I just remembered that that happened.
+  [  40.8-  42.2] Then we're going to go over to the fridge,
+  [  42.3-  44.3] we're going to see if there's anything new in there since 10 minutes ago.
+  [  44.5-  48.1] How does the procrastinator ever get himself over here to this blue zone?
+  [  48.3-  51.1] A less pleasant place, but where really important things happen.
+  [  51.5-  56.5] Well, it turns out that the procrastinator has a guardian angel,
+  [  56.7-  58.5] someone who's always looking down on him
+  [  58.5-  61.0] and watching over him in his darkest moments.
+  [  61.0-  62.9] Someone called the panic monster.
+[caption_video] target frame: 1080x1920, style=opus
+[caption_video] generated 192 caption frames
+[burn_captions] 192 overlays, encoding…
+✓ tim-urban-procrast.mp4 → tim-urban-procrast-top3.mp4 (top3): 834.1s → 63.3s (14/226 sentences, 5 segments)
+  rationale: The edit opens with the epic senior thesis story, as its high-stakes drama and humor provide the strongest possible hook. The second clip explains the 'why' behind this behavior by introducing the Instant Gratification Monkey, giving a hilarious and relatable example of its logic. The reel concludes by revealing the 'Panic Monster,' which provides a conceptual payoff and satisfying resolution to the problem established in the first two clips.

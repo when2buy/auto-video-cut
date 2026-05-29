@@ -1,0 +1,53 @@
+/home/colligo/.local/lib/python3.10/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+[0;93m2026-05-29 08:52:01.996570990 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+[remix_cut] 1/5 transcript loaded from /home/colligo/zouyang/personal/auto-video-cut/eval/runs/tim-urban-procrast-D-final.artifacts/transcript.json
+[remix_cut] 2/5 template 'thesis' via gemini-2.5-pro
+[remix] template=thesis kept 14 sentences = 53s of 675s
+[remix] indices in output order: [169, 170, 201, 203, 204, 175, 181, 182, 187, 188, 189, 190, 191, 192]
+[remix] rationale: The clip establishes the talk's core thesis by opening with the profound, emotional cost of procrastination: feeling like a spectator in one's own life. This serves as a powerful hook. The second half provides the single best example, explaining the mechanism behind this pain by contrasting funny, deadline-driven procrastination with the dangerous, long-term kind that affects life's most meaningful pursuits.
+[remix_cut] 3/5 cut (8 segments, output order)
+  [seg 0] 627.95-634.15s
+  [seg 1] 731.48-737.42s
+  [seg 2] 742.28-752.22s
+  [seg 3] 646.02-650.14s
+  [seg 4] 660.74-665.90s
+  [seg 5] 678.48-690.22s
+  ... (2 more)
+[seg 0] 627.95-634.15s
+[seg 1] 731.48-737.42s
+[seg 2] 742.28-752.22s
+[seg 3] 646.02-650.14s
+[seg 4] 660.74-665.90s
+[seg 5] 678.48-690.22s
+[seg 6] 690.54-699.74s
+[seg 7] 700.38-703.42s
+[remix_cut] 4/5 reframe to 1080x1920
+[reframe] face-tracked, 6 samples on cut.mp4
+[remix_cut] 5/5 captions (re-transcribe + render + overlay)
+  [   0.2-   3.5] These people were writing with intense frustration
+  [   3.5-   6.0] about what procrastination had done to their lives.
+  [   6.2-   7.4] They're in such a bad place.
+  [   7.8-  10.6] It's not that they're cramming for some project.
+  [  10.9-  12.8] It's that long-term, the frustration
+  [  12.8-  14.8] was not that they couldn't achieve their dreams,
+  [  14.8-  17.4] it's that they weren't even able to start chasing them.
+  [  17.8-  22.0] So I read these emails and I had a little bit of an epiphany.
+  [  22.1-  26.2] Well, it turns out that there's two kinds of procrastination.
+  [  26.3-  28.2] But there's a second kind of procrastination
+  [  28.2-  31.4] that happens in situations when there is no deadline.
+  [  31.6-  34.2] There's also all kinds of important things outside of your career
+  [  34.2-  35.8] that don't involve any deadlines,
+  [  35.9-  38.8] like seeing your family or exercising and taking care of your health,
+  [  39.5-  40.7] working on your relationship
+  [  40.7-  43.1] or getting out of a relationship that isn't working.
+  [  43.5-  46.4] Now, if the procrastinator's only mechanism
+  [  47.0-  49.9] of doing these hard things is the panic monster,
+  [  50.0-  52.4] that's a problem because in all of these non-deadline situations,
+  [  52.5-  54.5] the panic monster doesn't show up.
+  [  54.5-  55.4] He has nothing to wake up for.
+[caption_video] target frame: 1080x1920, style=opus
+[caption_video] generated 173 caption frames
+[burn_captions] 173 overlays, encoding…
+✓ tim-urban-procrast.mp4 → tim-urban-procrast-thesis.mp4 (thesis): 834.1s → 55.7s (14/226 sentences, 8 segments)
+  rationale: The clip establishes the talk's core thesis by opening with the profound, emotional cost of procrastination: feeling like a spectator in one's own life. This serves as a powerful hook. The second half provides the single best example, explaining the mechanism behind this pain by contrasting funny, deadline-driven procrastination with the dangerous, long-term kind that affects life's most meaningful pursuits.

@@ -1,0 +1,45 @@
+/home/colligo/.local/lib/python3.10/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+[0;93m2026-05-29 08:48:00.281594990 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+[remix_cut] 1/5 transcript loaded from /home/colligo/zouyang/personal/auto-video-cut/eval/runs/tim-urban-procrast-D-final.artifacts/transcript.json
+[remix_cut] 2/5 template 'viral_hook' via gemini-2.5-pro
+[remix] template=viral_hook kept 12 sentences = 34s of 675s
+[remix] indices in output order: [33, 14, 15, 16, 25, 26, 36, 40, 43, 44, 45, 46]
+[remix] rationale: Opens with the extreme and relatable feat from [33] as a powerful hook to grab the audience. The setup [14, 15, 16, 25, 26] establishes the context: a massive, year-long thesis paper that the speaker completely neglected. The payoff [36, 40, 43, 44, 45, 46] delivers a classic comedic misdirect, building suspense with the phone call before revealing the hilarious, self-deprecating punchline.
+[remix_cut] 3/5 cut (11 segments, output order)
+  [seg 0] 109.26-115.54s
+  [seg 1] 42.67-46.47s
+  [seg 2] 46.59-48.75s
+  [seg 3] 48.89-53.05s
+  [seg 4] 74.15-80.49s
+  [seg 5] 124.70-126.50s
+  ... (5 more)
+[seg 0] 109.26-115.54s
+[seg 1] 42.67-46.47s
+[seg 2] 46.59-48.75s
+[seg 3] 48.89-53.05s
+[seg 4] 74.15-80.49s
+[seg 5] 124.70-126.50s
+[seg 6] 131.92-134.02s
+[seg 7] 138.26-140.08s
+[seg 8] 148.05-149.59s
+[seg 9] 151.29-154.55s
+[seg 10] 156.34-160.10s
+[remix_cut] 4/5 reframe to 1080x1920
+[reframe] face-tracked, 6 samples on cut.mp4
+[remix_cut] 5/5 captions (re-transcribe + render + overlay)
+  [   0.0-   4.2] I wrote 90 pages over 72 hours, pulling not one, but two all-nighters.
+  [   4.4-   6.3] Humans are not supposed to pull two all-nighters.
+  [   6.4-  12.1] But then came my 90-page senior thesis, a paper you're supposed to spend a year 
+  [  12.5-  16.3] I knew for a paper like that, my normal workflow was not an option.
+  [  16.7-  18.5] But then, funniest thing happened.
+  [  18.6-  22.7] Those first few months, they came and went, and I couldn't quite do stuff.
+  [  23.0-  26.7] But a week later, I get a call, and they say, we need to talk about your thesis.
+  [  27.0-  28.6] It's the best one we've ever seen.
+  [  28.6-  33.4] That did not happen. It was a very, very bad thesis.
+  [  33.8-  37.3] I just wanted to enjoy that one moment when
+[caption_video] target frame: 1080x1920, style=opus
+[caption_video] generated 118 caption frames
+[burn_captions] 118 overlays, encoding…
+✓ tim-urban-procrast.mp4 → tim-urban-procrast-viral_hook.mp4 (viral_hook): 834.1s → 37.6s (12/226 sentences, 11 segments)
+  rationale: Opens with the extreme and relatable feat from [33] as a powerful hook to grab the audience. The setup [14, 15, 16, 25, 26] establishes the context: a massive, year-long thesis paper that the speaker completely neglected. The payoff [36, 40, 43, 44, 45, 46] delivers a classic comedic misdirect, building suspense with the phone call before revealing the hilarious, self-deprecating punchline.

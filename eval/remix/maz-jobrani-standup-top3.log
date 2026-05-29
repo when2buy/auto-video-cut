@@ -1,0 +1,45 @@
+/home/colligo/.local/lib/python3.10/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+[0;93m2026-05-29 08:56:40.345980779 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+[remix_cut] 1/5 transcript loaded from /home/colligo/zouyang/personal/auto-video-cut/eval/runs/maz-jobrani-standup-D-final.artifacts/transcript.json
+[remix_cut] 2/5 template 'top3' via gemini-2.5-pro
+[remix] template=top3 kept 13 sentences = 61s of 313s
+[remix] indices in output order: [145, 146, 147, 8, 9, 10, 11, 12, 66, 67, 68, 69, 70]
+[remix] rationale: The reel opens with the surreal and hilarious 'strawberry hijack' bit ([145-147]) for the strongest impact. The second moment ([8-12]) is a sharp observational joke about Doha's diversity with a great punchline about the locals. The reel closes on the physical comedy of the endless Saudi greeting ([66-70]), a highly visual and memorable gag.
+[remix_cut] 3/5 cut (5 segments, output order)
+  [seg 0] 378.63-397.69s
+  [seg 1] 401.53-405.87s
+  [seg 2] 26.49-48.77s
+  [seg 3] 168.81-182.90s
+  [seg 4] 185.10-188.10s
+[seg 0] 378.63-397.69s
+[seg 1] 401.53-405.87s
+[seg 2] 26.49-48.77s
+[seg 3] 168.81-182.90s
+[seg 4] 185.10-188.10s
+[remix_cut] 4/5 reframe to 1080x1920
+[reframe] face-tracked, 6 samples on cut.mp4
+[remix_cut] 5/5 captions (re-transcribe + render + overlay)
+  [   0.0-   4.9] The key to my Arab brothers and sisters, you've got to throw in random good word
+  [   5.4-   6.5] Just as you're walking down.
+  [   8.4-   8.7] Strawberry.
+  [  19.1-  19.8] Tutti Frutti.
+  [  21.1-  23.2] I think he's going to hijack the plane with some ice cream.
+  [  23.9-  30.5] Who then takes you to a Korean, who takes you to a Pakistani guy with the luggag
+  [  30.6-  32.5] You go to the hotel, you check in, there's a Lebanese.
+  [  33.6-  33.9] Yeah.
+  [  33.9-  36.9] And then a Swedish guy showed me my room.
+  [  37.0-  38.3] I said, where are the Qataris?
+  [  43.2-  44.5] They said, no, no, it's too hot.
+  [  44.6-  45.3] They come out later.
+  [  45.4-  45.7] They're smart.
+  [  45.9-  50.7] I went to Saudi Arabia.
+  [  50.7-  53.4] Saudi Arabia, they go one, two, and then they stay on the same side.
+  [  53.5-  59.6] Three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourt
+  [  59.9-  61.6] Next time you see a Saudi, look closer.
+  [  61.7-  62.6] They're just a little bit tilted.
+[caption_video] target frame: 1080x1920, style=opus
+[caption_video] generated 163 caption frames
+[burn_captions] 163 overlays, encoding…
+✓ maz-jobrani-standup.mp4 → maz-jobrani-standup-top3.mp4 (top3): 414.9s → 62.9s (13/149 sentences, 5 segments)
+  rationale: The reel opens with the surreal and hilarious 'strawberry hijack' bit ([145-147]) for the strongest impact. The second moment ([8-12]) is a sharp observational joke about Doha's diversity with a great punchline about the locals. The reel closes on the physical comedy of the endless Saudi greeting ([66-70]), a highly visual and memorable gag.

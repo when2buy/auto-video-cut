@@ -1,0 +1,44 @@
+/home/colligo/.local/lib/python3.10/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+[0;93m2026-05-29 08:53:52.753233127 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+[remix_cut] 1/5 transcript loaded from /home/colligo/zouyang/personal/auto-video-cut/eval/runs/maz-jobrani-standup-D-final.artifacts/transcript.json
+[remix_cut] 2/5 template 'viral_hook' via gemini-2.5-pro
+[remix] template=viral_hook kept 8 sentences = 36s of 313s
+[remix] indices in output order: [147, 121, 122, 124, 137, 142, 145, 146]
+[remix] rationale: The clip opens with the punchline [147] because 'hijack the plane with some ice cream' is an absurd and hilarious hook that grabs immediate attention. The setup [121, 122, 124, 137, 142, 145] then provides the full context of racial profiling on airplanes that makes the joke work. The clip resolves with the payoff [146], showing the comedian's performance of the advice, which explains the 'why' behind the initial hook.
+[remix_cut] 3/5 cut (6 segments, output order)
+  [seg 0] 401.53-405.87s
+  [seg 1] 300.76-308.54s
+  [seg 2] 313.36-315.04s
+  [seg 3] 343.79-346.21s
+  [seg 4] 366.69-369.67s
+  [seg 5] 378.63-397.69s
+[seg 0] 401.53-405.87s
+[seg 1] 300.76-308.54s
+[seg 2] 313.36-315.04s
+[seg 3] 343.79-346.21s
+[seg 4] 366.69-369.67s
+[seg 5] 378.63-397.69s
+[remix_cut] 4/5 reframe to 1080x1920
+[reframe] face-tracked, 7 samples on cut.mp4
+[remix_cut] 5/5 captions (re-transcribe + render + overlay)
+  [   0.0-   0.7] Tutti Frutti.
+  [   1.9-   4.1] I think he's going to hijack the plane with some ice cream.
+  [   4.4-   6.3] A little while ago in the U.S.,
+  [   6.3-   9.2] there was a Muslim family walking down the aisle of an airplane
+  [   9.2-  11.9] talking about the safest place to sit on the plane.
+  [  12.3-  13.6] Got them kicked off the plane.
+  [  14.0-  16.1] So my advice to all my Middle Eastern friends
+  [  16.1-  18.0] and some other tongues might sound a little threatening
+  [  18.0-  19.2] to the average American.
+  [  19.4-  20.9] The key to my Arab brothers and sisters,
+  [  21.0-  22.5] you got to throw in random good words
+  [  22.5-  24.3] to put people at ease as you're walking down the aisle.
+  [  24.8-  25.9] Just as you're walking down.
+  [  27.8-  28.2] Strawberry.
+  [  37.2-  38.0] No, no, no, no, no, no, no.
+[caption_video] target frame: 1080x1920, style=opus
+[caption_video] generated 112 caption frames
+[burn_captions] 112 overlays, encoding…
+✓ maz-jobrani-standup.mp4 → maz-jobrani-standup-viral_hook.mp4 (viral_hook): 414.9s → 38.4s (8/149 sentences, 6 segments)
+  rationale: The clip opens with the punchline [147] because 'hijack the plane with some ice cream' is an absurd and hilarious hook that grabs immediate attention. The setup [121, 122, 124, 137, 142, 145] then provides the full context of racial profiling on airplanes that makes the joke work. The clip resolves with the payoff [146], showing the comedian's performance of the advice, which explains the 'why' behind the initial hook.

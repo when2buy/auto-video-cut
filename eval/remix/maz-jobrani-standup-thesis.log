@@ -1,0 +1,47 @@
+/home/colligo/.local/lib/python3.10/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+[0;93m2026-05-29 08:58:50.768673523 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+[remix_cut] 1/5 transcript loaded from /home/colligo/zouyang/personal/auto-video-cut/eval/runs/maz-jobrani-standup-D-final.artifacts/transcript.json
+[remix_cut] 2/5 template 'thesis' via gemini-2.5-pro
+[remix] template=thesis kept 20 sentences = 47s of 313s
+[remix] indices in output order: [96, 97, 98, 102, 109, 114, 115, 116, 117, 119, 121, 122, 123, 124, 128, 129, 130, 131, 135, 136]
+[remix] rationale: The clip establishes the talk's core thesis: that Westerners, particularly Americans, misunderstand the Middle East, and that cultural exchange is the antidote to harmful stereotypes. The chosen example, a story of a family being kicked off a plane, provides a vivid and memorable illustration of the real-world consequences of this misunderstanding. The non-chronological order places the thesis first to frame the subsequent story as proof of the central claim.
+[remix_cut] 3/5 cut (12 segments, output order)
+  [seg 0] 244.07-250.55s
+  [seg 1] 256.05-257.19s
+  [seg 2] 268.89-271.55s
+  [seg 3] 283.82-286.28s
+  [seg 4] 286.42-292.46s
+  [seg 5] 293.32-299.34s
+  ... (6 more)
+[seg 0] 244.07-250.55s
+[seg 1] 256.05-257.19s
+[seg 2] 268.89-271.55s
+[seg 3] 283.82-286.28s
+[seg 4] 286.42-292.46s
+[seg 5] 293.32-299.34s
+[seg 6] 300.76-308.54s
+[seg 7] 308.70-313.08s
+[seg 8] 313.36-315.04s
+[seg 9] 319.44-323.44s
+[seg 10] 324.00-328.12s
+[seg 11] 339.31-343.57s
+[remix_cut] 4/5 reframe to 1080x1920
+[reframe] face-tracked, 8 samples on cut.mp4
+[remix_cut] 5/5 captions (re-transcribe + render + overlay)
+  [   0.0-   4.6] and it helps change the image of the middle east in the west like a lot of ameri
+  [   4.6-   8.6] lot about us about the middle east right people don't know we laugh you never se
+  [   8.6-  13.8] in american film or television right we like to laugh we like to celebrate life 
+  [  13.8-  17.6] americans would travel here i always encourage my friends to travel see the midd
+  [  17.6-  23.8] much to see so many good people and it helps uh stop problems of of of misunders
+  [  23.8-  28.9] stereotypes of happening for a little while ago in the u.s there was a muslim fa
+  [  28.9-  33.7] down the aisle of an airplane talking about the safest place to sit on the plane
+  [  33.7-  38.7] overheard them somehow misconstrued that as terrorist talk got them kicked off t
+  [  38.7-  42.9] hail i know there's certain things i'm not supposed to say on an airplane in the
+  [  42.9-  46.7] right not supposed to be like walking down the aisle and be like hi jack you kno
+  [  46.7-  51.2] cool but but now apparently we can't even talk about the safest place to sit on 
+[caption_video] target frame: 1080x1920, style=opus
+[caption_video] generated 199 caption frames
+[burn_captions] 199 overlays, encoding…
+✓ maz-jobrani-standup.mp4 → maz-jobrani-standup-thesis.mp4 (thesis): 414.9s → 51.1s (20/149 sentences, 12 segments)
+  rationale: The clip establishes the talk's core thesis: that Westerners, particularly Americans, misunderstand the Middle East, and that cultural exchange is the antidote to harmful stereotypes. The chosen example, a story of a family being kicked off a plane, provides a vivid and memorable illustration of the real-world consequences of this misunderstanding. The non-chronological order places the thesis first to frame the subsequent story as proof of the central claim.

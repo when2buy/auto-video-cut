@@ -1,0 +1,394 @@
+<!doctype html>
+<!--
+report-skill: 0.3.0
+template: compare-grid
+generated_at: 2026-05-27T00:16:32Z
+generator: report-skill/bin/report new
+git_sha: 23f1b1e
+-->
+<!--
+  template: compare-grid
+  schema_version: 1
+  when_to_use: side-by-side comparison of N model outputs (image/video/text)
+  data_schema:
+    title: string
+    tldr: string (markdown allowed)
+    columns: [{name: string, description?: string}]
+    rows: [{
+      id: string,
+      prompt?: string,
+      items: [{kind: "image"|"video"|"text"|"html", value: string, caption?: string}],
+      notes?: string
+    }]
+    metadata?: object  // shown in the "details" footer
+  example_input: examples/compare-grid-llm-eval.html
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>auto-video-cut · Approach Comparison</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-feature-settings: "ss01","cv11"; }
+  .layer-1 { background: linear-gradient(180deg,#fafafa,#f4f4f5); }
+  .cell-img img, .cell-video video { max-height: 280px; width: 100%; object-fit: contain; background:#0a0a0a; border-radius: 6px; }
+  .cell-text { white-space: pre-wrap; font-family: ui-monospace,SFMono-Regular,Menlo,monospace; font-size: 12.5px; line-height: 1.45; }
+  details > summary { cursor: pointer; user-select: none; }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 9999px; }
+</style>
+</head>
+<body class="bg-zinc-50 text-zinc-900">
+
+<!-- ======= DATA: an LLM (or a human) replaces this block ======= -->
+<script id="data" type="application/json">
+{
+  "title": "auto-video-cut · Approach Comparison",
+  "tldr": "**Recommendation: D (Hybrid silence + ASR + LLM).** All four candidates evaluated for 1h-talk → 5-10min cut. D layers (1) auto-editor silence prune → (2) Whisper transcribe → (3) Gemini paragraph rank → (4) ffmpeg cut. Each stage is independently testable, replaceable, and uses Steve's existing stack (Foundry Gemini + H100). Start v0.1 with A (silence-only, 1 day) and bolt on stages.",
+  "columns": [
+    {
+      "name": "A. Silence-only",
+      "description": "ffmpeg + auto-editor"
+    },
+    {
+      "name": "B. ASR + LLM",
+      "description": "Whisper + Gemini transcript-pick"
+    },
+    {
+      "name": "C. ML highlight",
+      "description": "PySceneDetect / Gemini-Pro-Video"
+    },
+    {
+      "name": "D. Hybrid ⭐",
+      "description": "Silence → ASR → LLM"
+    }
+  ],
+  "rows": [
+    {
+      "id": "how-it-works",
+      "prompt": "How it works",
+      "items": [
+        {
+          "kind": "text",
+          "value": "Detect non-silent segments (RMS / dBFS threshold), drop the rest, concat. ffmpeg silenceremove or auto-editor's audio-loudness pass.
+
+No transcription, no semantics."
+        },
+        {
+          "kind": "text",
+          "value": "Whisper → word-level timestamps → chunk into sentences → LLM ranks/selects 'best 10%' with timestamps → ffmpeg cuts and concats.
+
+Descript / Opus Clip / Submagic all use this pattern."
+        },
+        {
+          "kind": "text",
+          "value": "Frame-level scoring: scene-change (PySceneDetect), motion energy, face/laughter detect, CLIP embeddings — or full multimodal (Gemini-Pro-Video, 1 API call).
+
+Viral-clip products use this."
+        },
+        {
+          "kind": "text",
+          "value": "(1) auto-editor silence-prune (easy 30%)
+(2) Whisper on survivors
+(3) Gemini ranks paragraphs → keep-list
+(4) ffmpeg final concat
+
+Descript's actual pipeline."
+        }
+      ]
+    },
+    {
+      "id": "real-products",
+      "prompt": "Real OSS / products that ship this",
+      "items": [
+        {
+          "kind": "text",
+          "value": "auto-editor — github.com/WyattBlue/auto-editor (4.3k★)
+ffmpeg silenceremove
+Premiere 'auto-detect silence'
+
+What most YouTubers ship with."
+        },
+        {
+          "kind": "text",
+          "value": "autocut (Mu Li) — github.com/mli/autocut (7.7k★)
+WhisperX — github.com/m-bain/whisperX (22k★)
+faster-whisper (23k★)
+Descript Underlord, Opus Clip, Submagic, Captions.ai"
+        },
+        {
+          "kind": "text",
+          "value": "PySceneDetect (4.8k★)
+Vizard.ai, Munch
+TVSum / SumMe academic benchmarks
+Gemini-Pro-Video native 1h-input"
+        },
+        {
+          "kind": "text",
+          "value": "Descript pipeline (commercial)
+auto-editor `--edit` chaining + Whisper community recipes"
+        }
+      ]
+    },
+    {
+      "id": "pros",
+      "prompt": "Pros",
+      "items": [
+        {
+          "kind": "text",
+          "value": "✅ Trivial (1 day, ffmpeg only, no GPU)
+✅ Deterministic, no hallucination, $0
+✅ Battle-tested at scale"
+        },
+        {
+          "kind": "text",
+          "value": "✅ Genuinely smart selection — drops filler, keeps substance
+✅ 10:1+ compression (only approach that does)
+✅ Multilingual free (Whisper + Gemini)
+✅ ~$0.10/h on Foundry Gemini"
+        },
+        {
+          "kind": "text",
+          "value": "✅ Catches non-verbal moments (reactions, demos)
+✅ Gemini-Video collapses to 1 API call
+✅ Foundation for face-zoom / b-roll later"
+        },
+        {
+          "kind": "text",
+          "value": "✅ Each layer fixes prev layer's weakness
+✅ Degrades gracefully if LLM fails
+✅ Cheapest at scale (silence halves Whisper cost)
+✅ Off-the-shelf — no training"
+        }
+      ]
+    },
+    {
+      "id": "cons",
+      "prompt": "Cons",
+      "items": [
+        {
+          "kind": "text",
+          "value": "❌ Only ~30-50% compression (not 1h→5min)
+❌ Keeps every 'uhh' and filler
+❌ Useless for vlogs / B-roll"
+        },
+        {
+          "kind": "text",
+          "value": "⚠️ Audio-only — misses 'great visual, no speech'
+⚠️ 2-stage = more failure modes (timestamp drift, hallucinated cuts)
+⚠️ ~1-2min latency per hour"
+        },
+        {
+          "kind": "text",
+          "value": "❌ Pure visual scoring noisy w/o training data
+❌ Gemini-Video = $$$/h, rate-limited (1h ≈ 1M tokens)
+❌ Hardest to debug"
+        },
+        {
+          "kind": "text",
+          "value": "⚠️ 4 moving parts → more orchestration code (but each part small)
+⚠️ Still audio-centric (vlogs unsolved → punt to v1)"
+        }
+      ]
+    },
+    {
+      "id": "mvp-cost",
+      "prompt": "MVP cost",
+      "items": [
+        {
+          "kind": "text",
+          "value": "⏱ 1 day
+📦 ffmpeg, auto-editor"
+        },
+        {
+          "kind": "text",
+          "value": "⏱ 2-3 days
+📦 faster-whisper or WhisperX (H100 = 30-40× realtime), Foundry Gemini, ffmpeg"
+        },
+        {
+          "kind": "text",
+          "value": "⏱ 3-5d (visual) / 2d (Gemini-Video wrapper)
+📦 PySceneDetect, Gemini, ffmpeg"
+        },
+        {
+          "kind": "text",
+          "value": "⏱ 3-4 days
+📦 auto-editor + faster-whisper + Foundry Gemini + ffmpeg"
+        }
+      ]
+    },
+    {
+      "id": "best-for",
+      "prompt": "Best for",
+      "items": [
+        {
+          "kind": "text",
+          "value": "Solo talking-head, screencasts, podcasts
+Where 30% trim is the goal."
+        },
+        {
+          "kind": "text",
+          "value": "Lectures, talks, interviews, podcasts, technical content
+Anything speech-driven."
+        },
+        {
+          "kind": "text",
+          "value": "Vlogs, sports, gaming
+Anything where speech ≠ signal."
+        },
+        {
+          "kind": "text",
+          "value": "Steve's target inputs: talks, lectures, podcasts, technical streams.
+Speech-driven with degradation paths."
+        }
+      ]
+    },
+    {
+      "id": "decision-matrix",
+      "prompt": "Decision matrix axes",
+      "items": [
+        {
+          "kind": "text",
+          "value": "Quality:        ⚠️ shallow
+Speed-to-MVP:   ✅ 1d
+Cost:           ✅ free
+Flexibility:    ❌ rigid
+Multilingual:   ✅ N/A"
+        },
+        {
+          "kind": "text",
+          "value": "Quality:        ✅ smart
+Speed-to-MVP:   ⚠️ 2-3d
+Cost:           ✅ ~$0.10/h
+Flexibility:    ✅ promptable
+Multilingual:   ✅ Whisper+Gemini"
+        },
+        {
+          "kind": "text",
+          "value": "Quality:        ⚠️ noisy
+Speed-to-MVP:   ❌ 3-5d
+Cost:           ❌ $$$/h
+Flexibility:    ⚠️ opaque
+Multilingual:   ✅ visual"
+        },
+        {
+          "kind": "text",
+          "value": "Quality:        ✅ best
+Speed-to-MVP:   ⚠️ 3-4d
+Cost:           ✅ cheapest@scale
+Flexibility:    ✅ stage-swap
+Multilingual:   ✅ inherits B"
+        }
+      ],
+      "notes": "Hybrid wins on quality + cost + flexibility, only loses 2 days vs A. Confirm to lock in."
+    }
+  ],
+  "metadata": {
+    "git_sha": "v0.2-research",
+    "generated_at": "2026-05-26T17:30:00Z",
+    "phase": "research",
+    "next_action": "Steve confirms approach D → spec phase begins"
+  }
+}
+</script>
+
+<div x-data="reportApp()" x-init="init()" class="max-w-7xl mx-auto p-6">
+
+  <!-- HERO (leadership layer) -->
+  <header class="mb-8">
+    <div class="text-xs uppercase tracking-wider text-zinc-500 mb-1">compare-grid · report-skill</div>
+    <h1 class="text-3xl font-semibold tracking-tight" x-text="data.title"></h1>
+    <p class="mt-3 text-zinc-700 max-w-3xl leading-relaxed" x-text="data.tldr"></p>
+    <div class="mt-4 flex items-center gap-2 text-xs">
+      <span class="badge bg-zinc-200 text-zinc-700" x-text="data.rows.length + ' cases'"></span>
+      <span class="badge bg-zinc-200 text-zinc-700" x-text="data.columns.length + ' models'"></span>
+      <span class="badge bg-emerald-100 text-emerald-800" x-show="data.metadata?.git_sha"
+            x-text="'sha: ' + (data.metadata?.git_sha||'').slice(0,7)"></span>
+    </div>
+  </header>
+
+  <!-- TOOLBAR (teammate layer) -->
+  <div class="mb-4 flex flex-wrap gap-3 items-center text-sm">
+    <input type="text" placeholder="filter by id, prompt, notes…"
+           x-model="filter"
+           class="border border-zinc-300 bg-white rounded-md px-3 py-1.5 w-72">
+    <label class="flex items-center gap-2"><input type="checkbox" x-model="onlyDiffs"> only show diffs</label>
+    <span class="ml-auto text-zinc-500" x-text="visibleRows().length + ' / ' + data.rows.length + ' visible'"></span>
+  </div>
+
+  <!-- GRID -->
+  <div class="overflow-x-auto rounded-lg border border-zinc-200 bg-white shadow-sm">
+    <table class="min-w-full">
+      <thead class="bg-zinc-100">
+        <tr>
+          <th class="text-left px-3 py-2 text-xs font-semibold text-zinc-600 w-32">case</th>
+          <template x-for="col in data.columns" :key="col.name">
+            <th class="text-left px-3 py-2 text-xs font-semibold text-zinc-600">
+              <div x-text="col.name"></div>
+              <div class="font-normal text-zinc-500" x-text="col.description||''"></div>
+            </th>
+          </template>
+        </tr>
+      </thead>
+      <tbody>
+        <template x-for="row in visibleRows()" :key="row.id">
+          <tr class="border-t border-zinc-100 align-top">
+            <td class="px-3 py-3 text-sm">
+              <div class="font-mono text-xs text-zinc-500" x-text="row.id"></div>
+              <div class="mt-1 text-xs text-zinc-700" x-text="row.prompt||''"></div>
+              <div class="mt-2 text-xs text-amber-700" x-text="row.notes||''"></div>
+            </td>
+            <template x-for="(item,i) in row.items" :key="i">
+              <td class="px-3 py-3">
+                <template x-if="item.kind==='image'"><div class="cell-img"><img :src="item.value" :alt="item.caption||''"></div></template>
+                <template x-if="item.kind==='video'"><div class="cell-video"><video :src="item.value" controls muted></video></div></template>
+                <template x-if="item.kind==='html'"><div x-html="item.value"></div></template>
+                <template x-if="item.kind==='text'||!item.kind"><div class="cell-text" x-text="item.value"></div></template>
+                <div class="text-xs text-zinc-500 mt-1" x-text="item.caption||''"></div>
+              </td>
+            </template>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AUTHOR LAYER (raw metadata) -->
+  <details class="mt-8 text-sm">
+    <summary class="text-zinc-600 hover:text-zinc-900">raw metadata &amp; data dump</summary>
+    <pre class="mt-3 bg-zinc-900 text-zinc-100 p-4 rounded-md overflow-auto text-xs"
+         x-text="JSON.stringify(data, null, 2)"></pre>
+  </details>
+
+  <footer class="mt-12 text-xs text-zinc-400">
+    Generated with <a href="https://github.com/osh888/report-skill" class="underline">report-skill</a>.
+    View Source to recover the raw data.
+  </footer>
+</div>
+
+<script>
+function reportApp(){
+  return {
+    data: {},
+    filter: '',
+    onlyDiffs: false,
+    init(){ this.data = JSON.parse(document.getElementById('data').textContent); },
+    visibleRows(){
+      const f = this.filter.trim().toLowerCase();
+      return (this.data.rows||[]).filter(r=>{
+        if (this.onlyDiffs) {
+          const texts = (r.items||[]).map(i=>JSON.stringify(i.value));
+          if (new Set(texts).size <= 1) return false;
+        }
+        if (!f) return true;
+        const hay = JSON.stringify(r).toLowerCase();
+        return hay.includes(f);
+      });
+    }
+  };
+}
+</script>
+</body>
+</html>

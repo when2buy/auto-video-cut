@@ -73,3 +73,27 @@
 **Why**: handles wbi signing transparently, public videos require no cookie, robust to CDN flakiness when paired with `requests.adapters.HTTPAdapter(max_retries=Retry(total=5))`.
 
 **Reversibility**: easy. If yt-dlp's Bilibili extractor improves later, switch.
+
+---
+
+## 2026-05-29: v0.2 chose gemini-2.5-pro for keep-list, not gemini-3.5-flash
+
+**Context**: v0.2 needs an LLM to score 88-sentence transcripts and return ~30 keep-indices. Choices: 2.5-pro (slow, smart), 3.5-flash (fast, less smart), 3.1-flash-lite (cheapest).
+
+**Decision**: gemini-2.5-pro for v0.2. Switch to flash in v0.3 if quality holds.
+
+**Why**: first product release needs the best chance of coherent output. Slow LLM (~70s) is acceptable when total wall-clock is ~86s and the alternative is no shipping. Flash-vs-pro A/B is its own experiment, not gating v0.2 ship.
+
+**Reversibility**: trivial — change one CLI flag default.
+
+---
+
+## 2026-05-29: v0.2 reuses v0.1's extract_and_concat function
+
+**Context**: Both modes need to "cut a list of (start, end) segments and concat into output". v0.1's silence.py had this inline.
+
+**Decision**: rename `_extract_and_concat` -> `extract_and_concat` (public), import from silence.py into asr_cut.py. Don't duplicate.
+
+**Why**: keeps v0.1 and v0.2 fundamentally the same in their cut step — only their "how do we pick segments" differs. Future modes (visual / multimodal) plug into the same primitive.
+
+**Reversibility**: easy, single rename.

@@ -113,7 +113,7 @@ def silences_to_keeps(
     return [(a, b) for a, b in merged if b - a > 0.05]
 
 
-def _extract_and_concat(
+def extract_and_concat(
     input_path: Path,
     output_path: Path,
     keeps: list[tuple[float, float]],
@@ -179,7 +179,7 @@ def silence_cut(
     if not keeps:
         raise RuntimeError("no speech detected — input may be entirely silent")
 
-    _extract_and_concat(input_path, output_path, keeps, verbose=verbose)
+    extract_and_concat(input_path, output_path, keeps, verbose=verbose)
 
     if not output_path.exists():
         raise RuntimeError(f"ffmpeg returned 0 but no output at {output_path}")

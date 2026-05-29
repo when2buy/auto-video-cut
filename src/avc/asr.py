@@ -1,11 +1,11 @@
-"""ASR with faster-whisper. Returns word-level timestamps for Chinese/English mixed audio."""
+"""ASR with faster-whisper. Sentence-level + optional word-level timestamps for Chinese/English mixed audio."""
 
 from __future__ import annotations
 
 import json
 import subprocess
 import tempfile
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 
@@ -22,6 +22,7 @@ class SentenceSegment:
     end: float
     text: str
     word_count: int
+    words: list[WordSegment] | None = None
 
 
 @dataclass
@@ -47,11 +48,14 @@ def transcribe(
     *,
     model_size: str = "large-v3",
     language: str | None = None,
+    word_timestamps: bool = False,
     verbose: bool = False,
 ) -> Transcript:
     """Extract audio + run faster-whisper. Returns sentence-level segments.
 
     H100: ~30-40x realtime on large-v3.
+
+    Set ``word_timestamps=True`` to populate ``SentenceSegment.words`` for caption rendering.
     """
     from faster_whisper import WhisperModel
 
@@ -70,11 +74,11 @@ def transcribe(
         model = WhisperModel(model_size, device="cuda", compute_type="float16")
         segments, info = model.transcribe(
             str(wav),
-            language=language,  # None = auto-detect
+            language=language,
             beam_size=5,
-            vad_filter=True,    # Voice activity detection — drops silence
-            word_timestamps=False,  # we use segment-level for sentences
-            condition_on_previous_text=False,  # avoids drift on long audio
+            vad_filter=True,
+            word_timestamps=word_timestamps,
+            condition_on_previous_text=False,
         )
 
         sentences: list[SentenceSegment] = []
@@ -82,11 +86,21 @@ def transcribe(
             text = seg.text.strip()
             if not text:
                 continue
+            words = None
+            if word_timestamps and getattr(seg, "words", None):
+                words = [
+                    WordSegment(start=float(w.start), end=float(w.end), text=w.word.strip())
+                    for w in seg.words
+                    if w.start is not None and w.end is not None
+                ]
+                if not words:
+                    words = None
             sentences.append(SentenceSegment(
                 start=float(seg.start),
                 end=float(seg.end),
                 text=text,
                 word_count=len(text),
+                words=words,
             ))
             if verbose:
                 print(f"  [{seg.start:6.1f}-{seg.end:6.1f}] {text[:80]}")

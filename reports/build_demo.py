@@ -25,12 +25,15 @@ DATA = ROOT / "eval" / "data"
 OUT = ROOT / "reports" / "2026-05-30-v0.3-demo.html"
 
 
-def b64(p: Path, mime: str = "video/mp4") -> str:
-    return f"data:{mime};base64,{base64.b64encode(p.read_bytes()).decode('ascii')}"
-
-
 def collect_fixtures() -> list[dict]:
+    """Reference videos via relative URLs so the HTML stays small.
+
+    Videos are co-deployed alongside the HTML by ``eval/publish_all.sh``;
+    URLs are relative to the deployed site root, e.g.
+    ``assets/v0.3/<slug>-output.mp4``.
+    """
     fixtures: list[dict] = []
+    rel_assets = "assets/v0.3"
     for inp_video in sorted(ASSETS.glob("*-input.mp4")):
         slug = inp_video.stem.replace("-input", "")
         out_video = ASSETS / f"{slug}-output.mp4"
@@ -61,8 +64,8 @@ def collect_fixtures() -> list[dict]:
             "source": meta.get("source", ""),
             "duration": meta.get("duration_s"),
             "summary": summary,
-            "input_b64": b64(inp_video),
-            "output_b64": b64(out_video),
+            "input_url": f"{rel_assets}/{inp_video.name}",
+            "output_url": f"{rel_assets}/{out_video.name}",
         })
     return fixtures
 
@@ -122,7 +125,7 @@ HTML_TEMPLATE = r"""<!doctype html>
     <section x-show="active === i" class="grid md:grid-cols-2 gap-8 items-start mb-16">
       <div>
         <div class="text-xs uppercase tracking-widest text-zinc-500 mb-3">BEFORE — first 30 s sample</div>
-        <video :src="f.input_b64" controls preload="metadata" class="vid-horiz glow"></video>
+        <video :src="f.input_url" controls preload="metadata" class="vid-horiz glow"></video>
         <div class="mt-4 space-y-1 text-sm text-zinc-400">
           <div x-show="f.title" x-text="f.title"></div>
           <div x-show="f.duration" x-text="'full source: ' + Math.round(f.duration) + ' s'"></div>
@@ -134,7 +137,7 @@ HTML_TEMPLATE = r"""<!doctype html>
       <div>
         <div class="text-xs uppercase tracking-widest text-amber-400 mb-3">AFTER — 9:16 + captions, full output</div>
         <div class="flex justify-center">
-          <video :src="f.output_b64" controls preload="metadata" class="vid-vert glow ring-amber"></video>
+          <video :src="f.output_url" controls preload="metadata" class="vid-vert glow ring-amber"></video>
         </div>
         <div class="mt-4 text-sm text-amber-400 font-mono" x-text="f.summary"></div>
       </div>

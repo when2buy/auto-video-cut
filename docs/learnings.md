@@ -22,3 +22,16 @@ Format: `- YYYY-MM-DD <feature>: <one-line learning>`
 - 2026-05-29 cf-pages: each `report publish single-file` overwrites the prod deployment with only that file — historical URLs become 404 unless you batch-deploy. Solution: eval/publish_all.sh deploys reports/*.html in one wrangler call.
 - 2026-05-29 json-injection: `re.sub(pattern, repl_string, ...)` interprets backslash escapes in repl_string. Using `re.sub(pattern, lambda m: ..., ...)` avoids this. Was silently corrupting JSON with literal newlines from \n in repl strings, breaking Alpine.js rendering.
 - 2026-05-29 gemini-2.5-pro latency: ~70s for a 88-sentence prompt with structured output. faster-whisper is 5-6x faster than the LLM stage now. v0.3 candidate: switch to gemini-3.5-flash for the keep-list step, expect <10s.
+
+## 2026-05-30 — overnight v0.3 build
+
+- Whisper word_timestamps=True is essential for Opus-style captions; needed to update Transcript schema + pass-through.
+- This pod's ffmpeg build is custom & has NO subtitle filters (no ass, no subtitles, no drawtext). PIL+overlay is the workaround that works on every ffmpeg with `overlay`.
+- MediaPipe 0.10.35 deprecated `mediapipe.solutions.*`. The Tasks API needs a model file download; OpenCV Haar (bundled with cv2) avoids the download and is good enough for single-face talking-head.
+- Wrangler Pages files MUST be ≤25 MB each. Base64-embedding videos in HTML breaks at this limit. Use relative URLs + deploy a directory.
+- Cloudflare custom-domain DNS propagation takes ~30-60s after `wrangler pages deploy`. Don't ship URLs without a Playwright check.
+- For mixed-language transcripts, font selection has to be per-chunk (Latin if ASCII, CJK if any CJK glyph). Single bilingual font like Noto Sans CJK would be cleaner but requires a download.
+- Bilibili `dash` h264 streams sometimes have NAL corruption that survives `err_detect ignore_err -c copy` re-mux. Cure is `-c:v libx264` re-encode at fetch time.
+- Pipeline wall-clock breakdown for 14-min input on H100: ASR ~3 min, LLM pick ~80s, cut ~5s, reframe ~40s, captions (re-transcribe + render) ~90s. Total ~5-7 min ≈ 2× realtime. Re-transcribing the cut for caption sync is a 2× whisper cost; could cache word timestamps from the first pass and re-map indices instead.
+- `marketing-bili` source has hardcoded burned subs already → our captions overlap. v0.4 needs OCR-based region skip.
+

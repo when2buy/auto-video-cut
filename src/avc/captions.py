@@ -40,19 +40,23 @@ _FONT_CANDIDATES = {
         "/usr/share/fonts/truetype/lato/Lato-Bold.ttf",
     ],
     "cjk": [
+        # Verified present on this pod (`fc-list :lang=zh`) — Droid Sans Fallback
+        # has full CJK glyph coverage including 4 BMP CJK Unified Ideographs blocks.
+        "/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf",
         "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
         "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
         "/usr/share/fonts/opentype/source-han-sans/SourceHanSans-Bold.otf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",  # fallback (no CJK glyphs)
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",  # last-ditch (no CJK glyphs)
     ],
 }
 
 PRESETS: dict[str, dict] = {
-    # name              :  font_key,    size, color (RGB),         outline_color, outline_w, y_frac
-    "opus":     dict(font_key="latin-bold", size=64,  fill=(255, 255, 0),    stroke=(0, 0, 0),     stroke_w=4, y_frac=0.78),
-    "opus-cn":  dict(font_key="cjk",        size=58,  fill=(255, 255, 0),    stroke=(0, 0, 0),     stroke_w=4, y_frac=0.78),
-    "minimal":  dict(font_key="latin-bold", size=44,  fill=(255, 255, 255),  stroke=(0, 0, 0),     stroke_w=3, y_frac=0.85),
-    "karaoke":  dict(font_key="latin-bold", size=68,  fill=(0, 255, 0),      stroke=(0, 0, 0),     stroke_w=5, y_frac=0.78),
+    # name              :  font_key,    size, fill (RGB),         stroke (RGB),     stroke_w, y_frac, chunk_size
+    "opus":     dict(font_key="latin-bold", size=64,  fill=(255, 255, 0),    stroke=(0, 0, 0),     stroke_w=4, y_frac=0.78, chunk=3),
+    # Chinese: smaller font (CJK glyphs are wider) + shorter chunk so we don't overflow 1080px width
+    "opus-cn":  dict(font_key="cjk",        size=52,  fill=(255, 255, 0),    stroke=(0, 0, 0),     stroke_w=3, y_frac=0.80, chunk=2),
+    "minimal":  dict(font_key="latin-bold", size=44,  fill=(255, 255, 255),  stroke=(0, 0, 0),     stroke_w=3, y_frac=0.85, chunk=4),
+    "karaoke":  dict(font_key="latin-bold", size=68,  fill=(0, 255, 0),      stroke=(0, 0, 0),     stroke_w=5, y_frac=0.78, chunk=3),
 }
 
 
@@ -87,7 +91,7 @@ def build_caption_assets(
     style: str = "opus",
     play_w: int = 1080,
     play_h: int = 1920,
-    chunk_size: int = 3,
+    chunk_size: int | None = None,
 ) -> list[CaptionAsset]:
     """Render PNGs for each chunk of words. Returns timing manifest.
 
@@ -98,6 +102,8 @@ def build_caption_assets(
 
     P = PRESETS.get(style, PRESETS["opus"])
     font = _find_font(P["font_key"], P["size"])
+    if chunk_size is None:
+        chunk_size = P.get("chunk", 3)
 
     if not any(s.words for s in transcript.sentences):
         raise ValueError(
